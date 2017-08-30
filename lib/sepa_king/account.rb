@@ -4,10 +4,11 @@ module SEPA
     include ActiveModel::Validations
     extend Converter
 
-    attr_accessor :name, :iban, :bic
+    attr_accessor :name, :iban, :bic, :id, :issr, :city
     convert :name, to: :text
 
     validates_length_of :name, within: 1..70
+    validates_length_of :city, within: 1..35, allow_nil: true
     validates_with BICValidator, IBANValidator, message: "%{value} is invalid"
 
     def initialize(attributes = {})

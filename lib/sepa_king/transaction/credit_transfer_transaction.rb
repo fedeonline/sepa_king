@@ -14,11 +14,11 @@ module SEPA
 
     def schema_compatible?(schema_name)
       case schema_name
-      when PAIN_001_001_03
+      when PAIN_001_001_03, CBI_PARE_00_04_00
         self.service_level == 'SEPA'
       when PAIN_001_002_03
         self.bic.present? && self.service_level == 'SEPA' && self.currency == 'EUR'
-      when PAIN_001_003_03
+      when PAIN_001_003_03, CBI_PARE_00_04_00
         self.currency == 'EUR'
       end
     end

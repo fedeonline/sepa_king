@@ -30,6 +30,21 @@ module SEPA
     end
   end
 
+  class CategoryPurposeValidator < ActiveModel::Validator
+    VALID_CODES = %w(BONU CASH CBLK CCRD CORT DCRD DIVI DVPM EPAY FCOL GOVT HEDG ICCP IDCP INTC INTE LOAN MP2B MP2P OTHR PENS RVPM SALA SECU SSBE SUPP TAXS TRAD TREA VATX WHLD)
+
+    def validate(record)
+      field_name = options[:field_name] || :category_purpose
+      value = record.send(field_name)
+
+      if value
+        unless VALID_CODES.include? value.to_s
+          record.errors.add(field_name, :invalid, message: options[:message])
+        end
+      end
+    end
+  end
+
   class CreditorIdentifierValidator < ActiveModel::Validator
     REGEX = /\A[a-zA-Z]{2,2}[0-9]{2,2}([A-Za-z0-9]|[\+|\?|\/|\-|\:|\(|\)|\.|,|']){3,3}([A-Za-z0-9]|[\+|\?|\/|\-|:|\(|\)|\.|,|']){1,28}\z/
 

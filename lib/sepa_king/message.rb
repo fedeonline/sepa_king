@@ -7,6 +7,7 @@ module SEPA
   PAIN_001_001_03 = 'pain.001.001.03'
   PAIN_001_002_03 = 'pain.001.002.03'
   PAIN_001_003_03 = 'pain.001.003.03'
+  CBI_PARE_00_04_00 = 'cbi.pare.00.04.00'
 
   class Message
     include ActiveModel::Validations
@@ -61,17 +62,17 @@ module SEPA
       case schema_name
         when PAIN_001_002_03, PAIN_008_002_02, PAIN_001_001_03
           account.bic.present? && transactions.all? { |t| t.schema_compatible?(schema_name) }
-        when PAIN_001_003_03, PAIN_008_003_02, PAIN_008_001_02
+        when PAIN_001_003_03, PAIN_008_003_02, PAIN_008_001_02, CBI_PARE_00_04_00
           transactions.all? { |t| t.schema_compatible?(schema_name) }
       end
     end
 
     # Set unique identifer for the message
     def message_identification=(value)
-      raise ArgumentError.new('mesage_identification must be a string!') unless value.is_a?(String)
+      raise ArgumentError.new('message_identification must be a string!') unless value.is_a?(String)
 
       regex = /\A([A-Za-z0-9]|[\+|\?|\/|\-|\:|\(|\)|\.|\,|\'|\ ]){1,35}\z/
-      raise ArgumentError.new("mesage_identification does not match #{regex}!") unless value.match(regex)
+      raise ArgumentError.new("message_identification does not match #{regex}!") unless value.match(regex)
 
       @message_identification = value
     end
